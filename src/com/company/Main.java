@@ -12,7 +12,21 @@ public class Main {
         //Type t = String.class;
         //GenericStack3<String> gen = new GenericStack3<String>(Class<String>);
 
-        GenericStack2<Integer>[] gen = new GenericStack2<Integer>(new Class<Integer>());
+        //GenericStack2<Integer>[] gen = new GenericStack2<Integer>(new Class<Integer>());
+
+        //new Class<Integer>();
+
+        //new Class<Integer>();
+
+        Class<GenericStack2> manager = GenericStack2.class;
+
+        Integer i = new Integer(7);
+
+
+
+
+
+
 
 
         int[] arr = new int[20];

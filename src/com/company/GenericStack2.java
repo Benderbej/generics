@@ -1,15 +1,32 @@
 package com.company;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class GenericStack2<E> implements Stack<E>  {
 
 
+
+
+
+
+
+
     E[] entityArr;  //array = new E[0];
     int size;
     private Class<E> entityType = null;
+
+
+    public static void main(String[] args) {
+        GenericStack2<Integer> genericStack2 = new GenericStack2<Integer>(Integer.class);
+        try {
+            genericStack2.push(6);
+            genericStack2.push(8);
+        } catch (StackException e) {
+            e.printStackTrace();
+        }
+        System.out.println(genericStack2.toString());
+    }
 
 
     public GenericStack2(Class<E> entityType) {//передаем тип Е как объект класса Class          увы только такой конструктор сгенерил!!! *
@@ -24,6 +41,10 @@ public class GenericStack2<E> implements Stack<E>  {
         this.size = size;
     }
 
+
+
+
+
     public GenericStack2(E[] entityArr){//конструктор в обход рефлексии, если уже имеем массив
         this.entityArr = entityArr;
         this.size = Array.getLength(entityArr);
@@ -37,8 +58,10 @@ public class GenericStack2<E> implements Stack<E>  {
     @Override
     public void push(E element) throws StackException {
         int l = entityArr.length;
-        if(l < size) {
-            entityArr[l + 1] = element;
+        System.out.println("l="+l);
+        System.out.println("s="+getSize());
+        if(getSize() < l) {
+            entityArr[getSize()] = element;
         } else {
             throw new StackException();
         }
@@ -64,7 +87,28 @@ public class GenericStack2<E> implements Stack<E>  {
 
     @Override
     public int getSize() {
+        int size = 0;
+        for (E entity: entityArr) {
+            if(entity != null) {
+                size++;
+                System.out.println(entity.toString());
+            }
+            //System.out.println(entity.toString());
+        }
         return size;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (E entity: entityArr) {
+            if(entity != null) {
+                sb.append(entity.toString());
+            } else {
+                sb.append("null");
+            }
+        }
+        System.out.println(sb.toString());
+        return sb.toString();
     }
 
     public void setSize() {
