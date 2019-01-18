@@ -1,23 +1,23 @@
-package com.company;
+package ru.javabit;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class GenericStack<E> implements Stack<E>  {
+public class GenericStack4<E> implements Stack<E>  {
 
     List<E> container;
     int capacity;//вместимость стека
     int size;//количество элементов по факту
 
 
-    GenericStack(){
+    GenericStack4(){
         container = new ArrayList<>(10);
 
         size = 10;
     }
 
-    GenericStack(int capacity){
+    GenericStack4(int capacity){
         container = new ArrayList<>(capacity);
         this.capacity = capacity;
     }

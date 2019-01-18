@@ -1,4 +1,4 @@
-package com.company;
+package ru.javabit;
 
 import java.util.Collection;
 
@@ -16,6 +16,6 @@ public interface Stack<E> {
     public void pushAll(Collection<? extends E> src) throws
             StackException;
     // pop all elements from stack to @dst
-    public void popAll(Collection<? super E> dst) throws
+    public void popAll(Collection<? super E> dst) throws //просто удаление элементов? без возвращения их?
             StackException;
 }

@@ -1,4 +1,4 @@
-package com.company;
+package ru.javabit;
 
 public class StackException extends Exception {
 }

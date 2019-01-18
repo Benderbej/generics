@@ -1,66 +1,61 @@
-package com.company;
+package ru.javabit;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
 
-public class GenericStack2<E> implements Stack<E>  {
+public class GenericStack<E> implements Stack<E>  {
 
-
-
-
-
-
-
-
-    E[] entityArr;  //array = new E[0];
-    int size;
+    private E[] entityArr;
+    private int capacity; //length of entityArr
     private Class<E> entityType = null;
+    private int size; //amount of non-null elements in stack
 
 
     public static void main(String[] args) {
-        GenericStack2<Integer> genericStack2 = new GenericStack2<Integer>(Integer.class);
+        GenericStack<Integer> genericStack = new GenericStack<Integer>(Integer.class);
         try {
-            genericStack2.push(6);
-            genericStack2.push(8);
+            genericStack.push(6);
+            genericStack.push(8);
+            genericStack.push(6);
+            genericStack.push(8);
+            genericStack.push(6);
+            genericStack.push(8);
+            genericStack.push(6);
+            genericStack.push(8);
+            genericStack.push(6);
+            genericStack.push(8);
+
+            //genericStack.push(8);
         } catch (StackException e) {
             e.printStackTrace();
         }
-        System.out.println(genericStack2.toString());
+        System.out.println(genericStack.toString());
     }
 
-
-    public GenericStack2(Class<E> entityType) {//передаем тип Е как объект класса Class          увы только такой конструктор сгенерил!!! *
+    public GenericStack(Class<E> entityType) {//передаем тип Е как объект класса Class          увы только такой конструктор сгенерил!!! *
         this.entityType = entityType;
         entityArr = (E[]) Array.newInstance(entityType, 10);
-        this.size = 10;
+        this.capacity = 10;
     }
 
-    public GenericStack2(Class<E> entityType, int size) {//передаем тип Е как объект класса Class          увы только такой конструктор сгенерил!!!
+    public GenericStack(Class<E> entityType, int size) {//передаем тип Е как объект класса Class          увы только такой конструктор сгенерил!!!
         this.entityType = entityType;
         entityArr = (E[]) Array.newInstance(entityType, size);
-        this.size = size;
+        this.capacity = size;
     }
 
-
-
-
-
-    public GenericStack2(E[] entityArr){//конструктор в обход рефлексии, если уже имеем массив
+    public GenericStack(E[] entityArr){//конструктор в обход рефлексии, если уже имеем массив
         this.entityArr = entityArr;
-        this.size = Array.getLength(entityArr);
+        this.capacity = Array.getLength(entityArr);
     }
 
     //GenericStack3<?>[] gens = new GenericStack3<?>[10];
 
-
-
-
     @Override
     public void push(E element) throws StackException {
-        int l = entityArr.length;
-        System.out.println("l="+l);
+        System.out.println("capacity="+capacity);
         System.out.println("s="+getSize());
-        if(getSize() < l) {
+        if(getSize() < capacity) {
             entityArr[getSize()] = element;
         } else {
             throw new StackException();
@@ -69,32 +64,40 @@ public class GenericStack2<E> implements Stack<E>  {
 
     @Override
     public E pop() throws StackException {
+        E entity;
         if (!isEmpty()){
             //entityArr.length
-
+            entity = entityArr[getSize()-1];
+            entityArr[getSize()-1] = null;
         } else {
             throw new StackException();
         }
-
-        return null;
+        return entity;
     }
 
     @Override
-    public E peek() {
-
-        return null;
+    public E peek() throws StackException {
+        E entity;
+        if (!isEmpty()){
+            //entityArr.length
+            entity = entityArr[getSize()];
+            entityArr[getSize()] = null;
+        } else {
+            throw new StackException();
+        }
+        return entity;
     }
 
     @Override
     public int getSize() {
         int size = 0;
         for (E entity: entityArr) {
-            if(entity != null) {
+            if(entity != null) {//с примитивами также четко будет работать? int[] char[] - вопрос не стоит так как обобщаемый тип - не может быть примитивом - мы не можем написать GenericStack<int>
                 size++;
-                System.out.println(entity.toString());
+                System.out.println("entity.toString()"+entity.toString());
             }
-            //System.out.println(entity.toString());
         }
+        System.out.println("GenericStack.size is="+size);
         return size;
     }
 
@@ -111,13 +114,9 @@ public class GenericStack2<E> implements Stack<E>  {
         return sb.toString();
     }
 
-    public void setSize() {
-        this.size = entityArr.length;
-    }
-
     @Override
     public boolean isEmpty() {
-        if (entityArr.length == 0){
+        if (getSize() == 0){
             return true;
         }
         return false;
@@ -126,36 +125,37 @@ public class GenericStack2<E> implements Stack<E>  {
     @Override
     public boolean isFull() {
         int l = entityArr.length;
-        if(l < size) {
+        if(getSize() < capacity) {
             return false;
         }
         return true;
     }
 
     @Override
-    public void pushAll(Collection<? extends E> src) throws StackException {
-
-        for (E entity: src) {
-
+    public void pushAll(Collection<? extends E> src) throws StackException {//<? extends E> defines E as the upper bound: "This can be cast to E".
+        if(src.size() > capacity){
+            throw new StackException();
+        } else {
+            for (E element: src) {
+                entityArr[getSize()] = element;
+            }
         }
-
     }
 
     @Override
-    public void popAll(Collection<? super E> dst) throws StackException {
-
+    public void popAll(Collection<? super E> dst) throws StackException {//<? super E> defines E as the lower bound: "E can be cast to this."
+        if (getSize()>0) {
+            while (getSize() > 0) {
+                dst.add(this.pop());
+            }
+        } else {
+            throw new StackException();
+        }
     }
-
-
-
-
-
 
     public Class<E> getEntityType() {
         return this.entityType;
     }
-
-
 
 }
 /*

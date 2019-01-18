@@ -1,4 +1,4 @@
-package com.company;
+package ru.javabit;
 
 import java.util.ArrayList;
 import java.util.Collection;
